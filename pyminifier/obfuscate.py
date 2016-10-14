@@ -76,7 +76,7 @@ def obfuscation_machine(use_unicode=False, identifier_length=1):
                 yield perm
         identifier_length += 1
 
-def apply_obfuscation(source):
+def apply_obfuscation(module, source):
     """
     Returns 'source' all obfuscated.
     """
@@ -89,11 +89,11 @@ def apply_obfuscation(source):
     classes = find_obfuscatables(tokens, obfuscatable_class)
     functions = find_obfuscatables(tokens, obfuscatable_function)
     for variable in variables:
-        replace_obfuscatables(tokens, obfuscate_variable, variable, name_generator)
+        replace_obfuscatables(module, tokens, obfuscate_variable, variable, name_generator)
     for function in functions:
-        replace_obfuscatables(tokens, obfuscate_function, function, name_generator)
+        replace_obfuscatables(module, tokens, obfuscate_function, function, name_generator)
     for _class in classes:
-        replace_obfuscatables(tokens, obfuscate_class, _class, name_generator)
+        replace_obfuscatables(module, tokens, obfuscate_class, _class, name_generator)
     return token_utils.untokenize(tokens)
 
 def find_obfuscatables(tokens, obfunc, ignore_length=False):
@@ -758,13 +758,17 @@ def obfuscate(module, tokens, options, name_generator=None, table=None):
 if __name__ == "__main__":
     global name_generator
     try:
+        sourcefile = sys.argv[1]
+        module = os.path.split(sourcefile)[1]
+        module = ".".join(module.split('.')[:-1])
         source = open(sys.argv[1]).read()
     except:
         print("Usage: %s <filename.py>" % sys.argv[0])
         sys.exit(1)
+
     if sys.version_info[0] == 3:
         name_generator = obfuscation_machine(use_unicode=True)
     else:
         name_generator = obfuscation_machine(identifier_length=1)
-    source = apply_obfuscation(source)
+    source = apply_obfuscation(module, source)
     print(source)
