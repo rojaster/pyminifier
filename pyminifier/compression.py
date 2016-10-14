@@ -41,7 +41,7 @@ files.  To pack a number of files at once using this method use the
 import os, sys, tempfile, shutil
 
 # Import our own supporting modules
-from . import analyze, token_utils, minification, obfuscate
+from pyminifier import analyze, token_utils, minification, obfuscate
 
 py3 = False
 if not isinstance(sys.version_info, tuple):

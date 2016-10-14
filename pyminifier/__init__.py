@@ -71,10 +71,10 @@ from optparse import OptionParser
 from collections import Iterable
 
 # Import our own modules
-from . import minification
-from . import token_utils
-from . import obfuscate
-from . import compression
+from pyminifier import minification
+from pyminifier import token_utils
+from pyminifier import obfuscate
+from pyminifier import compression
 
 py3 = False
 lzma = False
@@ -161,6 +161,8 @@ def pyminify(options, files):
     All accepted options can　be listed by running ``python __main__.py -h`` or
     examining the :py:func:`__init__.main` function.
     """
+    print("fuck~!")
+
     global name_generator
     if not is_iterable(files):
         print(

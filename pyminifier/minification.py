@@ -12,7 +12,7 @@ except ImportError: # We're using Python 3
     import io
 
 # Import our own modules
-from . import analyze, token_utils
+from pyminifier import analyze, token_utils
 
 # Compile our regular expressions for speed
 multiline_quoted_string = re.compile(r'(\'\'\'|\"\"\")')

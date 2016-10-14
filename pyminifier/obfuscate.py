@@ -10,8 +10,8 @@ from random import shuffle, choice
 from itertools import permutations
 
 # Import our own modules
-from . import analyze
-from . import token_utils
+from pyminifier import analyze
+from pyminifier import token_utils
 
 if not isinstance(sys.version_info, tuple):
     if sys.version_info.major == 3:
@@ -89,11 +89,9 @@ def apply_obfuscation(source):
     classes = find_obfuscatables(tokens, obfuscatable_class)
     functions = find_obfuscatables(tokens, obfuscatable_function)
     for variable in variables:
-        replace_obfuscatables(
-            tokens, obfuscate_variable, variable, name_generator)
+        replace_obfuscatables(tokens, obfuscate_variable, variable, name_generator)
     for function in functions:
-        replace_obfuscatables(
-            tokens, obfuscate_function, function, name_generator)
+        replace_obfuscatables(tokens, obfuscate_function, function, name_generator)
     for _class in classes:
         replace_obfuscatables(tokens, obfuscate_class, _class, name_generator)
     return token_utils.untokenize(tokens)

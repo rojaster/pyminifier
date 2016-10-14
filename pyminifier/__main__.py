@@ -1,8 +1,8 @@
 from optparse import OptionParser
 import sys
 
-from . import pyminify
-from . import __version__
+from pyminifier import pyminify
+from pyminifier import __version__
 
 py3 = False
 lzma = False
@@ -168,6 +168,7 @@ def main():
     if not files:
         parser.print_help()
         sys.exit(2)
+    print(options)
     pyminify(options, files)
 
 
