@@ -89,15 +89,18 @@ if not isinstance(sys.version_info, tuple):
 # Regexes
 multiline_indicator = re.compile('\\\\(\s*#.*)?\n')
 
+
 # The test.+() functions below are for testing pyminifier...
 def test_decorator(f):
     """Decorator that does nothing"""
     return f
 
+
 def test_reduce_operators():
     """Test the case where an operator such as an open paren starts a line"""
     (a, b) = 1, 2 # The indentation level should be preserved
     pass
+
 
 def test_empty_functions():
     """
@@ -105,12 +108,14 @@ def test_empty_functions():
     This should be replaced with 'def test_empty_functions(): pass'
     """
 
+
 class test_class(object):
     "Testing indented decorators"
 
     @test_decorator
     def test_function(self):
         pass
+
 
 def test_function():
     """
@@ -140,8 +145,9 @@ def test_function():
     # starting at this line:
     #     "elif token_type == tokenize.STRING:"
     # This tests remove_extraneous_spaces():
-    this_line_has_leading_indentation    = '''<--That extraneous space should be
+    this_line_has_leading_indentation = '''<--That extraneous space should be
                                               removed''' # But not these spaces
+
 
 def is_iterable(obj):
     """
@@ -152,6 +158,7 @@ def is_iterable(obj):
         return False
     return isinstance(obj, Iterable)
 
+
 def pyminify(options, files):
     """
     Given an *options* object (from `optparse.OptionParser` or similar),
@@ -161,7 +168,6 @@ def pyminify(options, files):
     All accepted options can　be listed by running ``python __main__.py -h`` or
     examining the :py:func:`__init__.main` function.
     """
-    print("fuck~!")
 
     global name_generator
     if not is_iterable(files):
@@ -214,7 +220,7 @@ def pyminify(options, files):
             else:
                 name_generator = obfuscate.obfuscation_machine(
                     identifier_length=identifier_length)
-            table =[{}]
+            table = [{}]
         cumulative_size = 0 # For size reduction stats
         cumulative_new = 0 # Ditto
         for sourcefile in files:
@@ -251,9 +257,9 @@ def pyminify(options, files):
                 result = compression.gz_pack(result)
             elif lzma and options.lzma:
                 result = compression.lzma_pack(result)
-            result += (
-                "# Created by pyminifier "
-                "(https://github.com/liftoff/pyminifier)\n")
+            # result += (
+            #     "# Created by pyminifier "
+            #     "(https://github.com/liftoff/pyminifier)\n")
             # Either save the result to the output file or print it to stdout
             if not os.path.exists(options.destdir):
                 os.mkdir(options.destdir)
@@ -265,10 +271,10 @@ def pyminify(options, files):
             f.close()
             new_filesize = os.path.getsize(path)
             cumulative_new += new_filesize
-            percent_saved = round((float(new_filesize) / float(filesize)) * 100, 2) if float(filesize)!=0 else 0
+            percent_saved = round((float(new_filesize) / float(filesize)) * 100, 2) if float(filesize) != 0 else 0
             print((
-                "{sourcefile} ({filesize}) reduced to {new_filesize} bytes "
-                "({percent_saved}% of original size)").format(**locals()))
+                      "{sourcefile} ({filesize}) reduced to {new_filesize} bytes "
+                      "({percent_saved}% of original size)").format(**locals()))
         p_saved = round(
             (float(cumulative_new) / float(cumulative_size) * 100), 2)
         print("Overall size reduction: {0}% of original size".format(p_saved))
@@ -288,8 +294,8 @@ def pyminify(options, files):
             tokens = token_utils.listified_tokenizer(source)
         # Perform obfuscation if any of the related options were set
         if options.obfuscate or options.obf_classes or options.obf_functions \
-                or options.obf_variables or options.obf_builtins \
-                or options.obf_import_methods:
+            or options.obf_variables or options.obf_builtins \
+            or options.obf_import_methods:
             identifier_length = int(options.replacement_length)
             name_generator = obfuscate.obfuscation_machine(
                 identifier_length=identifier_length)
@@ -306,18 +312,21 @@ def pyminify(options, files):
             result = compression.gz_pack(result)
         elif lzma and options.lzma:
             result = compression.lzma_pack(result)
-        result += (
-            "# Created by pyminifier "
-            "(https://github.com/liftoff/pyminifier)\n")
+        # result += (
+        #     "# Created by pyminifier "
+        #     "(https://github.com/liftoff/pyminifier)\n")
         # Either save the result to the output file or print it to stdout
         if options.outfile:
             f = io.open(options.outfile, 'w', encoding='utf-8')
             f.write(result)
             f.close()
             new_filesize = os.path.getsize(options.outfile)
-            percent_saved = round(float(new_filesize)/float(filesize) * 100, 2)
+            percent_saved = round(float(new_filesize) / float(filesize) * 100, 2)
             print((
                 "{_file} ({filesize}) reduced to {new_filesize} bytes "
                 "({percent_saved}% of original size)".format(**locals())))
         else:
-            print(result)
+            if not os.getenv('PYCHARM_HOSTED'):
+                print(result)
+            return result
+
