@@ -328,5 +328,6 @@ def pyminify(options, files):
         else:
             if not os.getenv('PYCHARM_HOSTED'):
                 print(result)
+                return result
             return result
 
